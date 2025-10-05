@@ -3,32 +3,41 @@ package org.example.Network;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import org.example.Network.Packets.PacketMessage;
+import org.example.Network.Packets.ChatMessage;
 
 import java.io.IOException;
 
+import static org.example.Network.Network.PORT;
+
 public class GameServer {
+    private Server server;
+
     public GameServer() throws IOException {
-        Server server = new Server();
-        server.getKryo().register(PacketMessage.class);
+        server = new Server();
+
+        Network.RegisterClasses(server);
+
         server.addListener(new Listener() {
             @Override
-            public void connected(Connection connection)
-            {
-                System.out.println("Клиент подключился: " + connection.getRemoteAddressTCP().getHostString());
-
-                PacketMessage response = new PacketMessage();
-                response.message = "Привет от сервера!";
-                connection.sendTCP(response); // Отправка по TCP
+            public void connected(Connection connection) {
+                System.out.println("Клиент подключился: " + connection.getRemoteAddressTCP());
+                connection.sendTCP(new ChatMessage("Сервер", "Добро пожаловать в чат!"));
             }
 
             @Override
-            public void disconnected(Connection connection) {
-                System.out.println("Клиент отключился.");
+            public void received(Connection connection, Object object) {
+                if (object instanceof ChatMessage) {
+                    ChatMessage message = (ChatMessage) object;
+                    System.out.println(": " + message.text);
+
+                    // Рассылаем сообщение всем подключенным клиентам
+                    server.sendToAllTCP(message);
+                }
             }
         });
-        server.start();
-        server.bind(55555);
 
+        server.start();
+        server.bind(PORT, PORT);
+        System.out.println("Сервер запущен на порту " + PORT);
     }
 }
