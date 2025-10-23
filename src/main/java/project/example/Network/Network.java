@@ -2,7 +2,7 @@ package project.example.Network;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import project.example.Network.Packets.ChatMessage;
+import project.example.Network.Packets.HandshakePacket;
 
 public class Network {
     public static final int PORT = 55555;
@@ -10,7 +10,7 @@ public class Network {
     public static void RegisterClasses(EndPoint endPoint)
     {
         Kryo kryo = endPoint.getKryo();
-        kryo.register(ChatMessage.class);
+        kryo.register(HandshakePacket.class);
         kryo.register(String.class);
     }
 }
