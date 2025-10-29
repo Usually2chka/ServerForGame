@@ -24,6 +24,11 @@ public class GameServer {
         server.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
+                HandshakePacket packet = new HandshakePacket();
+                packet.lobbies = ServerData.getLobbies();
+                if (packet.lobbies.isEmpty())
+                    System.out.println("null");
+                connection.sendTCP(packet);
             }
 
             @Override

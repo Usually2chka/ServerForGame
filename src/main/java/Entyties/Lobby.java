@@ -7,11 +7,11 @@ public class Lobby {
     private int maxPlayers;
     private boolean isPrivate;
     private Player hostPlayer;
-    private short sizeWorld;
+    private int sizeWorld;
     private boolean isFallBlocks;
     private ArrayList<Player> players;
 
-    public Lobby(String lobbyName, int maxPlayers, boolean isPrivate, Player hostPlayer, short sizeWorld, boolean isFallBlocks)
+    public Lobby(String lobbyName, int maxPlayers, boolean isPrivate, Player hostPlayer, int sizeWorld, boolean isFallBlocks)
     {
         this.lobbyName = lobbyName;
         this.maxPlayers = maxPlayers;

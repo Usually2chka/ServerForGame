@@ -20,6 +20,6 @@ public class ServerData {
     }
 
     public static ArrayList<Lobby> getLobbies() {
-        return (ArrayList<Lobby>) lobbyes.clone();
+        return new ArrayList<>(lobbyes);
     }
 }

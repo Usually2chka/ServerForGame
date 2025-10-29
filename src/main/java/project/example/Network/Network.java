@@ -1,11 +1,14 @@
 package project.example.Network;
 
+import Entyties.Lobby;
 import Entyties.Player;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import project.example.Network.Packets.HandshakePacket;
 import project.example.Network.Packets.LobbyPacket;
 import project.example.Network.Packets.SuccessPacket;
+
+import java.util.ArrayList;
 
 public class Network {
     public static final int PORT = 55555;
@@ -17,5 +20,7 @@ public class Network {
         kryo.register(LobbyPacket.class);
         kryo.register(Player.class);
         kryo.register(SuccessPacket.class);
+        kryo.register(ArrayList.class);
+        kryo.register(Lobby.class);
     }
 }
