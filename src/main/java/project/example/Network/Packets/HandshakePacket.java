@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class HandshakePacket {
     public ArrayList<Lobby> lobbies;
 
-//    public HandshakePacket()
-//    {
-//        lobbies = ServerData.getLobbies();
-//    }
+    public HandshakePacket()
+    {
+        lobbies = ServerData.getLobbies();
+    }
 }

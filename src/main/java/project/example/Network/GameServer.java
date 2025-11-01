@@ -47,7 +47,7 @@ public class GameServer {
 
     public void updateData()
     {
-        server.sendToAllTCP(new SuccessPacket());
+        server.sendToAllTCP(new HandshakePacket());
     }
 
     private void processedHandshakePacker()
@@ -57,13 +57,15 @@ public class GameServer {
 
     private void processedLobbyPacket(LobbyPacket lobbyPacket, Connection connection)
     {
-        ServerData.createLobby(new Lobby(lobbyPacket.lobbyName,
-                                         lobbyPacket.maxPlayers,
-                                         lobbyPacket.isPrivate,
-                                         lobbyPacket.hostPlayer,
-                                         lobbyPacket.sizeWorld,
-                                         lobbyPacket.isFallBlocks));
+        Lobby lobby = new Lobby(lobbyPacket.lobbyName,
+                                lobbyPacket.maxPlayers,
+                                lobbyPacket.isPrivate,
+                                lobbyPacket.hostPlayer,
+                                lobbyPacket.sizeWorld,
+                                lobbyPacket.isFallBlocks);
+        ServerData.createLobby(lobby);
         server.sendToTCP(connection.getID(), new LobbyPacket(true));
-        updateData();
+        server.sendToAllTCP(new SuccessPacket(lobby));
+        //updateData();
     }
 }

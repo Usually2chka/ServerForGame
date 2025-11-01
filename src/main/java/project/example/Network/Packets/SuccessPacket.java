@@ -6,11 +6,12 @@ import LocalData.ServerData;
 import java.util.ArrayList;
 
 public class SuccessPacket {
-    public boolean isSuccess;
-    public ArrayList<Lobby> lobbies;
+    public Lobby lobby;
 
-    public SuccessPacket()
+    public SuccessPacket() {}
+
+    public SuccessPacket(Lobby lobby)
     {
-        this.lobbies = ServerData.getLobbies();
+        this.lobby = lobby;
     }
 }

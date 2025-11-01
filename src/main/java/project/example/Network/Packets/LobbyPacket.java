@@ -1,5 +1,6 @@
 package project.example.Network.Packets;
 
+import Entyties.Lobby;
 import Entyties.Player;
 
 public class LobbyPacket {
