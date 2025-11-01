@@ -10,6 +10,7 @@ import project.example.Network.Packets.LobbyPacket;
 import project.example.Network.Packets.SuccessPacket;
 
 import java.io.IOException;
+import java.util.*;
 
 import static project.example.Network.Network.PORT;
 
@@ -46,7 +47,7 @@ public class GameServer {
 
     public void updateData()
     {
-        server.sendToAllTCP(SuccessPacket.class);
+        server.sendToAllTCP(new SuccessPacket());
     }
 
     private void processedHandshakePacker()

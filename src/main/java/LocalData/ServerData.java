@@ -17,6 +17,8 @@ public class ServerData {
     public static void createLobby(Lobby lobby)
     {
         lobbyes.add(lobby);
+        for(Lobby lb : lobbyes)
+            System.out.println(lb);
     }
 
     public static ArrayList<Lobby> getLobbies() {

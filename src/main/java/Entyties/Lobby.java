@@ -17,6 +17,7 @@ public class Lobby {
         this.maxPlayers = maxPlayers;
         this.isPrivate = isPrivate;
         this.hostPlayer = hostPlayer;
+        this.players = new ArrayList<>();
     }
 
     public void joinToLobby(Player player)
