@@ -4,9 +4,7 @@ import Entyties.Lobby;
 import Entyties.Player;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import project.example.Network.Packets.HandshakePacket;
-import project.example.Network.Packets.LobbyPacket;
-import project.example.Network.Packets.SuccessPacket;
+import project.example.Network.Packets.*;
 
 import java.util.ArrayList;
 
@@ -17,10 +15,11 @@ public class Network {
     {
         Kryo kryo = endPoint.getKryo();
         kryo.register(HandshakePacket.class);
-        kryo.register(LobbyPacket.class);
+        kryo.register(CreateLobbyPacket.class);
         kryo.register(Player.class);
-        kryo.register(SuccessPacket.class);
+        kryo.register(LobbyPacket.class);
         kryo.register(ArrayList.class);
         kryo.register(Lobby.class);
+        kryo.register(JoinToLobbyPacket.class);
     }
 }

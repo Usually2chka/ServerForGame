@@ -1,22 +1,14 @@
 package project.example.Network.Packets;
 
 import Entyties.Lobby;
-import Entyties.Player;
 
 public class LobbyPacket {
-    public String lobbyName;
-    public int maxPlayers;
-    public boolean isPrivate;
-    public short sizeWorld;
-    public boolean isFallBlocks;
-    public Player hostPlayer;
+    public Lobby lobby;
 
-    public boolean isSuccess;
+    public LobbyPacket() {}
 
-    public LobbyPacket() { }
-
-    public LobbyPacket(boolean isSuccess)
+    public LobbyPacket(Lobby lobby)
     {
-        this.isSuccess = isSuccess;
+        this.lobby = lobby;
     }
 }

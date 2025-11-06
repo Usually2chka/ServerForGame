@@ -1,6 +1,7 @@
 package LocalData;
 
 import Entyties.Lobby;
+import Entyties.Player;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,12 @@ public class ServerData {
     public static void createLobby(Lobby lobby)
     {
         lobbies.add(lobby);
-        System.out.println(lobbies.get(lobbies.size()-1));
+        System.out.println(lobbies.toString());
+    }
+    public static void connectToLobby(Lobby lobby, Player player)
+    {
+        lobby.joinToLobby(player);
+        System.out.println(lobby.toString());
     }
 
     public static ArrayList<Lobby> getLobbies() {

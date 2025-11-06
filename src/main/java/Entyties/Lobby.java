@@ -11,12 +11,19 @@ public class Lobby {
     private boolean isFallBlocks;
     private ArrayList<Player> players;
 
-    public Lobby(String lobbyName, int maxPlayers, boolean isPrivate, Player hostPlayer, int sizeWorld, boolean isFallBlocks)
+    private Lobby()
+    {
+
+    }
+
+    public Lobby(String lobbyName, int maxPlayers, boolean isPrivate, int sizeWorld, boolean isFallBlocks, Player hostPlayer)
     {
         this.lobbyName = lobbyName;
         this.maxPlayers = maxPlayers;
         this.isPrivate = isPrivate;
         this.hostPlayer = hostPlayer;
+        this.sizeWorld = sizeWorld;
+        this.isFallBlocks = isFallBlocks;
         this.players = new ArrayList<>();
     }
 
@@ -24,4 +31,38 @@ public class Lobby {
     {
         players.add(player);
     }
+
+    public String getLobbyName()
+    {
+        return lobbyName;
+    }
+
+    public int getMaxPlayers()
+    {
+        return maxPlayers;
+    }
+
+    public boolean getIsPrivate()
+    {
+        return isPrivate;
+    }
+
+    public int getSizeWorld()
+    {
+        return sizeWorld;
+    }
+
+    public int getPlayers() { return players.size(); }
+
+    public boolean getIsFallBlocks()
+    {
+        return isFallBlocks;
+    }
+
+    @Override
+    public String toString()
+    {
+        return lobbyName + " " + maxPlayers + " " + isPrivate + " " + hostPlayer + " " + sizeWorld + " " + isFallBlocks + " " + players.size() + "/4";
+    }
+
 }
