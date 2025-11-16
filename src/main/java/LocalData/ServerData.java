@@ -18,7 +18,7 @@ public class ServerData {
         lobbies = new HashMap<>();
     }
 
-    public static void createLobby(Lobby lobby)
+    public static void createLobby(Lobby lobby)//, Player leaderRoom)
     {
         lobbies.put(lobby.getId(), lobby);
         //lobby.joinToLobby(leaderRoom);
@@ -37,12 +37,12 @@ public class ServerData {
 
     public static Lobby leaveFromLobby(Lobby lobby, Player player)
     {
-        Lobby lb = findByID(lobby.getId());
+        Lobby lb = findLobbyByID(lobby.getId());
         lb.kickPlayer(player);
         return lb;
     }
 
-    public static Lobby findByID(int id)
+    public static Lobby findLobbyByID(int id)
     {
         return lobbies.get(id);
     }
@@ -56,8 +56,9 @@ public class ServerData {
 
         return list;
     }
+
     public static int generateLobbyId() { return ++nextLobbyId; }
     public static int generateNextPlayerId() { return ++nextPlayerId; }
     public static int getNextLobbyId() { return nextLobbyId; }
-    public static int getNextPlayerId() { return  nextPlayerId; }
+    public static int getNextPlayerId() { return nextPlayerId; }
 }

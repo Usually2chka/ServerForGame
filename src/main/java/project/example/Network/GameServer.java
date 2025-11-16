@@ -16,7 +16,6 @@ public class GameServer {
 
     public GameServer() throws IOException {
         server = new Server();
-
         Network.RegisterClasses(server);
 
         server.addListener(new Listener() {
@@ -77,9 +76,9 @@ public class GameServer {
                                 createLobbyPacket.isFallBlocks,
                                 createLobbyPacket.hostPlayer,
                                 ServerData.generateLobbyId());
-        ServerData.createLobby(lobby);
+        ServerData.createLobby(lobby);//, createLobbyPacket.hostPlayer);
         leaderLobby.sendTCP(new CreateLobbyPacket(true, ServerData.getNextLobbyId()));
-        server.sendToAllTCP(new LobbyPacket(lobby));
+        server.sendToAllTCP(new AllLobbiesPacket());
     }
 
     private void processedAllLobbiesPacket(Connection connection, AllLobbiesPacket packet)
@@ -88,7 +87,7 @@ public class GameServer {
     }
     private void processedLobbyPacket(LobbyPacket packet)
     {
-        Lobby lobby = ServerData.findByID(packet.lobby.getId());
+        Lobby lobby = ServerData.findLobbyByID(packet.lobby.getId());
         if (lobby.getPlayers() == 0)
             ServerData.removeLobby(lobby);
 
