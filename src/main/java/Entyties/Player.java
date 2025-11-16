@@ -2,10 +2,13 @@ package Entyties;
 
 public class Player {
     private String name;
-    private long id;
+    private int id;
 
-    public Player()
-    {
+    public Player() {
 
+    }
+
+    public int getId() {
+        return id;
     }
 }

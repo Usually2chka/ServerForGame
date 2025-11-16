@@ -24,27 +24,27 @@ public class GameServer {
             public void connected(Connection connection) {
                 HandshakePacket packet = new HandshakePacket();
                 packet.lobbies = ServerData.getLobbies();
-                if (packet.lobbies.isEmpty())
-                    System.out.println("null");
+                packet.playerId = ServerData.generateNextPlayerId();
                 connection.sendTCP(packet);
             }
 
             @Override
             public void received(Connection connection, Object object) {
+                if (object instanceof LobbyPacket)
+                    processedLobbyPacket((LobbyPacket) object);
+                if (object instanceof AllLobbiesPacket)
+                    processedAllLobbiesPacket(connection, (AllLobbiesPacket) object);
                 if (object instanceof CreateLobbyPacket)
-                    processedLobbyPacket((CreateLobbyPacket) object, connection);
+                    processedCreateLobbyPacket((CreateLobbyPacket) object, connection);
                 if (object instanceof JoinToLobbyPacket)
                     processedJoinToLobbyPacket(connection, (JoinToLobbyPacket) object);
+                if (object instanceof  LeaveFromLobbyPacket)
+                    processedLeaveFromLobbyPacket((LeaveFromLobbyPacket) object);
             }
         });
 
         server.start();
         server.bind(PORT);
-    }
-
-    public void updateData()
-    {
-        server.sendToAllTCP(new HandshakePacket());
     }
 
     private void processedJoinToLobbyPacket(Connection connection, JoinToLobbyPacket packet)
@@ -55,6 +55,8 @@ public class GameServer {
             if (packet.lobby.getPlayers() < packet.lobby.getMaxPlayers()) {
                 ServerData.connectToLobby(packet.lobby, packet.player);
                 answer.isAllowed = true;
+                server.sendToAllTCP(new AllLobbiesPacket());
+
             } else {
                 answer.isAllowed = false;
                 answer.reason = "Lobby is full";
@@ -66,15 +68,34 @@ public class GameServer {
         }
     }
 
-    private void processedLobbyPacket(CreateLobbyPacket createLobbyPacket, Connection connection)
+    private void processedCreateLobbyPacket(CreateLobbyPacket createLobbyPacket, Connection leaderLobby)
     {
         Lobby lobby = new Lobby(createLobbyPacket.lobbyName,
                                 createLobbyPacket.maxPlayers,
                                 createLobbyPacket.isPrivate,
                                 createLobbyPacket.sizeWorld,
                                 createLobbyPacket.isFallBlocks,
-                                createLobbyPacket.hostPlayer);
+                                createLobbyPacket.hostPlayer,
+                                ServerData.generateLobbyId());
         ServerData.createLobby(lobby);
+        leaderLobby.sendTCP(new CreateLobbyPacket(true, ServerData.getNextLobbyId()));
         server.sendToAllTCP(new LobbyPacket(lobby));
+    }
+
+    private void processedAllLobbiesPacket(Connection connection, AllLobbiesPacket packet)
+    {
+        server.sendToAllTCP(new AllLobbiesPacket());
+    }
+    private void processedLobbyPacket(LobbyPacket packet)
+    {
+        Lobby lobby = ServerData.findByID(packet.lobby.getId());
+        if (lobby.getPlayers() == 0)
+            ServerData.removeLobby(lobby);
+
+        server.sendToAllTCP(new AllLobbiesPacket());
+    }
+    private void processedLeaveFromLobbyPacket(LeaveFromLobbyPacket packet)
+    {
+        processedLobbyPacket(new LobbyPacket(ServerData.leaveFromLobby(packet.lobby, packet.player)));
     }
 }

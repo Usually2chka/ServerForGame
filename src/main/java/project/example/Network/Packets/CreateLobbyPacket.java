@@ -9,13 +9,13 @@ public class CreateLobbyPacket {
     public int sizeWorld;
     public boolean isFallBlocks;
     public Player hostPlayer;
-
-    public boolean isSuccess;
+    public boolean isAllowed;
+    public int id;
 
     public CreateLobbyPacket() { }
-
-    public CreateLobbyPacket(boolean isSuccess)
+    public CreateLobbyPacket(boolean isAllowed, int id)
     {
-        this.isSuccess = isSuccess;
+        this.isAllowed = isAllowed;
+        this.id = id;
     }
 }

@@ -1,8 +1,13 @@
 package Entyties;
 
+import LocalData.ServerData;
+import com.esotericsoftware.kryonet.Connection;
+
 import java.util.ArrayList;
 
 public class Lobby {
+    private int id;
+
     private String lobbyName;
     private int maxPlayers;
     private boolean isPrivate;
@@ -11,12 +16,12 @@ public class Lobby {
     private boolean isFallBlocks;
     private ArrayList<Player> players;
 
-    private Lobby()
+    public Lobby()
     {
 
     }
 
-    public Lobby(String lobbyName, int maxPlayers, boolean isPrivate, int sizeWorld, boolean isFallBlocks, Player hostPlayer)
+    public Lobby(String lobbyName, int maxPlayers, boolean isPrivate, int sizeWorld, boolean isFallBlocks, Player hostPlayer, int id)
     {
         this.lobbyName = lobbyName;
         this.maxPlayers = maxPlayers;
@@ -25,12 +30,22 @@ public class Lobby {
         this.sizeWorld = sizeWorld;
         this.isFallBlocks = isFallBlocks;
         this.players = new ArrayList<>();
+        players.add(hostPlayer);
+        this.id = id;
     }
 
     public void joinToLobby(Player player)
     {
         players.add(player);
     }
+
+    @Override
+    public String toString()
+    {
+        return lobbyName + " " + isPrivate + " " + hostPlayer + " " + sizeWorld + " " + isFallBlocks + " " + players.size() + "/" + maxPlayers;
+    }
+
+    public void kickPlayer(Player player) { players.remove(findById(player.getId())); }
 
     public String getLobbyName()
     {
@@ -59,10 +74,13 @@ public class Lobby {
         return isFallBlocks;
     }
 
-    @Override
-    public String toString()
-    {
-        return lobbyName + " " + maxPlayers + " " + isPrivate + " " + hostPlayer + " " + sizeWorld + " " + isFallBlocks + " " + players.size() + "/4";
-    }
+    public int getId() { return id; }
 
+    public Player findById(int id) {
+        Player player = null;
+        for (Player pl : players)
+            if (pl.getId() == id)
+                player = pl;
+        return player;
+    }
 }

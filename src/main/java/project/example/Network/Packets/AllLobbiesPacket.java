@@ -1,11 +1,16 @@
 package project.example.Network.Packets;
 
+
 import Entyties.Lobby;
 import LocalData.ServerData;
 
 import java.util.ArrayList;
 
-public class HandshakePacket {
+public class AllLobbiesPacket {
     public ArrayList<Lobby> lobbies;
-    public int playerId;
+
+    public AllLobbiesPacket()
+    {
+        lobbies = ServerData.getLobbies();
+    }
 }
