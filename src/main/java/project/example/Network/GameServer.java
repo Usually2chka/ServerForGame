@@ -1,6 +1,7 @@
 package project.example.Network;
 
 import Entyties.Lobby;
+import Entyties.Player;
 import LocalData.ServerData;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -8,11 +9,13 @@ import com.esotericsoftware.kryonet.Server;
 import project.example.Network.Packets.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static project.example.Network.Network.PORT;
 
 public class GameServer {
     private Server server;
+    private HashMap<Connection, Integer> connectionKey = new HashMap<>();
 
     public GameServer() throws IOException {
         server = new Server();
@@ -24,6 +27,7 @@ public class GameServer {
                 HandshakePacket packet = new HandshakePacket();
                 packet.lobbies = ServerData.getLobbies();
                 packet.playerId = ServerData.generateNextPlayerId();
+                connectionKey.put(connection, packet.playerId);
                 connection.sendTCP(packet);
             }
 
@@ -40,6 +44,18 @@ public class GameServer {
                 if (object instanceof  LeaveFromLobbyPacket)
                     processedLeaveFromLobbyPacket((LeaveFromLobbyPacket) object);
             }
+
+            @Override
+            public void disconnected(Connection connection) {
+                Player player = ServerData.findPlayerByID(connectionKey.get(connection));
+                Lobby lobby = ServerData.findLobbyByID(player.lobbyId);
+
+                if (player.lobbyId != -1 && lobby != null)
+                {
+                    ServerData.leaveFromLobby(lobby, player);
+                    processedLobbyPacket(new LobbyPacket(lobby));
+                }
+            }
         });
 
         server.start();
@@ -55,7 +71,6 @@ public class GameServer {
                 ServerData.connectToLobby(packet.lobby, packet.player);
                 answer.isAllowed = true;
                 server.sendToAllTCP(new AllLobbiesPacket());
-
             } else {
                 answer.isAllowed = false;
                 answer.reason = "Lobby is full";
@@ -76,7 +91,7 @@ public class GameServer {
                                 createLobbyPacket.isFallBlocks,
                                 createLobbyPacket.hostPlayer,
                                 ServerData.generateLobbyId());
-        ServerData.createLobby(lobby);//, createLobbyPacket.hostPlayer);
+        ServerData.createLobby(lobby, createLobbyPacket.hostPlayer);
         leaderLobby.sendTCP(new CreateLobbyPacket(true, ServerData.getNextLobbyId()));
         server.sendToAllTCP(new AllLobbiesPacket());
     }
@@ -88,6 +103,7 @@ public class GameServer {
     private void processedLobbyPacket(LobbyPacket packet)
     {
         Lobby lobby = ServerData.findLobbyByID(packet.lobby.getId());
+
         if (lobby.getPlayers() == 0)
             ServerData.removeLobby(lobby);
 
@@ -95,6 +111,7 @@ public class GameServer {
     }
     private void processedLeaveFromLobbyPacket(LeaveFromLobbyPacket packet)
     {
+
         processedLobbyPacket(new LobbyPacket(ServerData.leaveFromLobby(packet.lobby, packet.player)));
     }
 }

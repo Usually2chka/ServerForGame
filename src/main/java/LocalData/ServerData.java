@@ -10,24 +10,28 @@ import java.util.HashMap;
 public class ServerData {
 
     private static HashMap<Integer, Lobby> lobbies;
+    private static HashMap<Integer, Player> listPlayers;
     private static int nextLobbyId = -1;
     private static int nextPlayerId = -1;
 
     public ServerData()
     {
         lobbies = new HashMap<>();
+        listPlayers = new HashMap<>();
     }
 
-    public static void createLobby(Lobby lobby)//, Player leaderRoom)
+    public static void createLobby(Lobby lobby, Player leaderRoom)
     {
         lobbies.put(lobby.getId(), lobby);
-        //lobby.joinToLobby(leaderRoom);
-        System.out.println(lobbies.toString());
+        leaderRoom.lobbyId = lobby.getId();
+        listPlayers.put(leaderRoom.getId(), leaderRoom);
     }
     public static void connectToLobby(Lobby lobby, Player player)
     {
+        listPlayers.put(player.getId(), player);
+        player.lobbyId = lobby.getId();
         lobby.joinToLobby(player);
-        System.out.println(lobby.toString());
+        lobbies.replace(lobby.getId(), lobbies.get(lobby.getId()), lobby);
     }
 
     public static void removeLobby(Lobby lobby)
@@ -37,8 +41,13 @@ public class ServerData {
 
     public static Lobby leaveFromLobby(Lobby lobby, Player player)
     {
-        Lobby lb = findLobbyByID(lobby.getId());
-        lb.kickPlayer(player);
+        Lobby lb = null;
+        if (lobby != null) {
+            lb = findLobbyByID(lobby.getId());
+            lb.kickPlayer(player);
+            lobbies.replace(lb.getId(), lobbies.get(lb.getId()), lb);
+        }
+
         return lb;
     }
 
@@ -47,18 +56,29 @@ public class ServerData {
         return lobbies.get(id);
     }
 
+    public static Player findPlayerByID(int id)
+    {
+        return listPlayers.get(id);
+    }
+
     public static ArrayList<Lobby> getLobbies() {
         ArrayList<Lobby> list = new ArrayList<>();
 
-        for (int i = 0; i < lobbies.size(); i++)
-            if (lobbies.get(i) != null)
-                list.add(lobbies.get(i));
+        for (Lobby lobby : lobbies.values())
+            if (lobby != null)
+                list.add(lobby);
 
         return list;
     }
 
+    public static int generateNextPlayerId() {
+        int newId = ++nextPlayerId;
+        Player newPlayer = new Player();
+        listPlayers.put(newId, newPlayer);
+
+        return newId;
+    }
     public static int generateLobbyId() { return ++nextLobbyId; }
-    public static int generateNextPlayerId() { return ++nextPlayerId; }
     public static int getNextLobbyId() { return nextLobbyId; }
     public static int getNextPlayerId() { return nextPlayerId; }
 }

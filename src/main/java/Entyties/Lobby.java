@@ -1,8 +1,5 @@
 package Entyties;
 
-import LocalData.ServerData;
-import com.esotericsoftware.kryonet.Connection;
-
 import java.util.ArrayList;
 
 public class Lobby {
@@ -39,17 +36,23 @@ public class Lobby {
         players.add(player);
     }
 
+    public void kickPlayer(Player player) {
+        players.remove(findById(player.getId()));
+    }
+
     @Override
     public String toString()
     {
         return lobbyName + " " + isPrivate + " " + hostPlayer + " " + sizeWorld + " " + isFallBlocks + " " + players.size() + "/" + maxPlayers;
     }
 
-    public void kickPlayer(Player player) { players.remove(findById(player.getId())); }
-
     public String getLobbyName()
     {
         return lobbyName;
+    }
+
+    public int getHostID() {
+        return players.get(0).getId();
     }
 
     public int getMaxPlayers()
@@ -67,7 +70,10 @@ public class Lobby {
         return sizeWorld;
     }
 
-    public int getPlayers() { return players.size(); }
+    public int getPlayers()
+    {
+        return players.size();
+    }
 
     public boolean getIsFallBlocks()
     {
