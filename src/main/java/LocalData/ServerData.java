@@ -45,6 +45,10 @@ public class ServerData {
         if (lobby != null) {
             lb = findLobbyByID(lobby.getId());
             lb.kickPlayer(player);
+
+            if (player.getId() == lb.getHostID() && lb.getPlayers() > 0)
+                lb.updateHost();
+
             lobbies.replace(lb.getId(), lobbies.get(lb.getId()), lb);
         }
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Lobby {
     private int id;
-
     private String lobbyName;
     private int maxPlayers;
     private boolean isPrivate;
@@ -52,7 +51,12 @@ public class Lobby {
     }
 
     public int getHostID() {
-        return players.get(0).getId();
+        return hostPlayer.getId();
+    }
+
+    public void updateHost()
+    {
+        hostPlayer = players.get(0);
     }
 
     public int getMaxPlayers()
