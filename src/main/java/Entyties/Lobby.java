@@ -2,7 +2,7 @@ package Entyties;
 
 import java.util.ArrayList;
 
-public class Lobby {
+public class Lobby implements Cloneable{
     private int id;
     private String lobbyName;
     private int maxPlayers;
@@ -57,6 +57,18 @@ public class Lobby {
     public void updateHost()
     {
         hostPlayer = players.get(0);
+    }
+
+    public int[] getIdPlayers() {
+        int[] arr = new int[players.size()-1];
+        for (int i = 0; i < arr.length; i++)
+            arr[i] = players.get(i).getId();
+        return arr;
+    }
+
+    public ArrayList<Player> getEntityPlayers() {
+
+        return players; //нарушение инкапсуляции, знаю
     }
 
     public int getMaxPlayers()

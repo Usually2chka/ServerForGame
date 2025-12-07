@@ -2,13 +2,14 @@ package project.example.Network.Packets;
 
 import Entyties.Lobby;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class LobbyPacket {
-    public Lobby lobby;
+    public int lobbyId;
+    public int sizeWorld;
+    public int maxPlayers;
+    public boolean isPrivate;
 
-    public LobbyPacket() {}
-
-    public LobbyPacket(Lobby lobby)
-    {
-        this.lobby = lobby;
-    }
+    public LobbyPacket() { }
 }
