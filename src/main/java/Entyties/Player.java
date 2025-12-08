@@ -7,7 +7,7 @@ public class Player {
     private int positionY;
     public boolean isDied;
     private String name;
-    private int id;
+    public int id;
     public boolean isTurned;
     public int lobbyId = -1;
 

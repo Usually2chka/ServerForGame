@@ -57,7 +57,7 @@ public class GameServer {
             public void disconnected(Connection connection) {
                 Player player = ServerData.findPlayerByID(connectionKey.get(connection));
                 Lobby lobby = ServerData.findLobbyByID(player.lobbyId);
-                System.out.println(player.lobbyId);
+                //System.out.println(player.lobbyId);
                 if (player.lobbyId != -1 && lobby != null)
                     processedLeaveFromLobbyPacket(lobby.getId(), player.getId(), connection);
 
@@ -141,8 +141,7 @@ public class GameServer {
 
         inialisationGame(packet);
         ServerData.removeLobby(ServerData.findLobbyByID(packet.lobbyId));
-        server.sendToAllTCP(new AllLobbiesPacket()); //удаление в рантайм
-        //server.sendToAllTCP(new LobbyPacket());
+        server.sendToAllTCP(new AllLobbiesPacket());
     }
 
     private void processedGameStatePacket(GameStatePacket packet) {

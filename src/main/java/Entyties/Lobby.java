@@ -2,7 +2,7 @@ package Entyties;
 
 import java.util.ArrayList;
 
-public class Lobby implements Cloneable{
+public class Lobby {
     private int id;
     private String lobbyName;
     private int maxPlayers;
@@ -53,6 +53,8 @@ public class Lobby implements Cloneable{
     public int getHostID() {
         return hostPlayer.getId();
     }
+
+    public Player getHostPlayer() { return hostPlayer; }
 
     public void updateHost()
     {
